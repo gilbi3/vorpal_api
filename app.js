@@ -9,9 +9,10 @@ app.use(bodyParser.json());
 
 var Note = require('./models/note');
 
-mongoose.connect('mongodb+srv://dev:test123@vorpaldb-a1b8k.azure.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true }).catch((e) => {
-	console.log(e)
-});
+mongoose.connect('mongodb+srv://dev:test123@vorpaldb-a1b8k.azure.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true })
+	.catch((e) => {
+		console.log(e)
+	});
 
 var db = mongoose.connection;
 
@@ -20,40 +21,41 @@ db.once('open', function () {
 });
 
 app.get("/notes", async (req, res) => {
-	try{
-		Note.find({}, function(err, notes) {
+	try {
+		Note.find({}, function (err, notes) {
 			var noteMap = {};
-		
-			notes.forEach(function(note) {
-			  noteMap[note._id] = note;
+
+			notes.forEach(function (note) {
+				noteMap[note._id] = note;
 			});
-		
-			res.send(noteMap);  
-		  });
+
+			res.send(noteMap);
+		});
 	}
-	catch(e){
+	catch (e) {
 		res.status(500).send(e);
 	}
 });
 
 app.get("/notes/:id", async (req, res) => {
-	try{
+	try {
 		Note.findById(req.params.id, function (err, note) {
 			if (err)
 				res.send(err);
 			res.json(note);
 		});
 	}
-	catch(e){
+	catch (e) {
 		res.status(500).send(e);
 	}
-	
+
 });
 
 app.post("/notes", async (req, res) => {
 	try {
 		var note = new Note(req.body);
-		note.created = node.updated = new Date();
+		var actionDate = new Date();
+		note.created = note.updated = actionDate;
 		var result = note.save();
 		res.send(result);
 	}
@@ -77,8 +79,8 @@ app.put("/notes/:id", async (req, res) => {
 
 app.delete("/notes/:id", async (req, res) => {
 	try {
-		var result = await Note.deleteOne({ _id: request.params.id }).exec();
-        response.send(result);
+		var result = await Note.deleteOne({ _id: req.params.id }).exec();
+		res.send(result);
 	} catch (e) {
 		res.status(500).send(e);
 	}

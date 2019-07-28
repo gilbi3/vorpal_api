@@ -6,7 +6,9 @@ var Schema = mongoose.Schema;
 var NoteSchema = new Schema({
     text: String,
     created: Date,
-    updated: Date
+    updated: Date,
+    started: Boolean,
+    completed: Boolean
 });
 
 module.exports = mongoose.model('Note', NoteSchema);
