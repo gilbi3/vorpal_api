@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 var Note = require('./models/note');
 
-mongoose.connect('mongodb+srv://dev:test123@gibirdso-mongo-tx8oi.azure.mongodb.net/notes?retryWrites=true&w=majority', { useNewUrlParser: true }).catch((e) => {
+mongoose.connect('mongodb+srv://dev:test123@vorpaldb-a1b8k.azure.mongodb.net/test?retryWrites=true&w=majority', { useNewUrlParser: true }).catch((e) => {
 	console.log(e)
 });
 
