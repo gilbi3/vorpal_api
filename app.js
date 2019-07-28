@@ -34,7 +34,6 @@ app.get("/notes", async (req, res) => {
 	catch(e){
 		res.status(500).send(e);
 	}
-	
 });
 
 app.get("/notes/:id", async (req, res) => {
@@ -54,6 +53,7 @@ app.get("/notes/:id", async (req, res) => {
 app.post("/notes", async (req, res) => {
 	try {
 		var note = new Note(req.body);
+		note.created = node.updated = new Date();
 		var result = note.save();
 		res.send(result);
 	}
@@ -67,6 +67,7 @@ app.put("/notes/:id", async (req, res) => {
 	try {
 		var note = await Note.findById(req.params.id).exec();
 		note.set(req.body);
+		note.updated = new Date();
 		var result = await note.save();
 		res.send(result);
 	} catch (e) {
