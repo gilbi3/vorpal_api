@@ -19,6 +19,24 @@ db.once('open', function () {
 	console.log("DB connection alive");
 });
 
+app.get("/notes", async (req, res) => {
+	try{
+		Note.find({}, function(err, notes) {
+			var noteMap = {};
+		
+			notes.forEach(function(note) {
+			  noteMap[note._id] = note;
+			});
+		
+			res.send(noteMap);  
+		  });
+	}
+	catch(e){
+		res.status(500).send(e);
+	}
+	
+});
+
 app.get("/notes/:id", async (req, res) => {
 	try{
 		Note.findById(req.params.id, function (err, note) {
@@ -51,6 +69,15 @@ app.put("/notes/:id", async (req, res) => {
 		note.set(req.body);
 		var result = await note.save();
 		res.send(result);
+	} catch (e) {
+		res.status(500).send(e);
+	}
+});
+
+app.delete("/notes/:id", async (req, res) => {
+	try {
+		var result = await Note.deleteOne({ _id: request.params.id }).exec();
+        response.send(result);
 	} catch (e) {
 		res.status(500).send(e);
 	}
