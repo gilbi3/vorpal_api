@@ -39,13 +39,13 @@ db.once('open', function () {
 app.get("/notes", async (req, res) => {
 	try {
 		Note.find({}, function (err, notes) {
-			var noteMap = {};
+			var noteArray = [];
 
 			notes.forEach(function (note) {
-				noteMap[note._id] = note;
+				noteArray.push(note);
 			});
 
-			res.send(noteMap);
+			res.send(noteArray);
 		});
 	}
 	catch (e) {
