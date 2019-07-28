@@ -10,7 +10,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "build": "npm install && node app"
+    "build": "npm install && npm run start",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
