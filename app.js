@@ -3,8 +3,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const cors = require('cors');
+const cors = require('cors')
 const app = express()
+
 var port = process.env.PORT || 8080;
 
 app.use(cors());
@@ -62,18 +63,18 @@ app.post("/user/login", async (req, res) => {
 		User.findOne({username: req.body.username}, function (err, user) {
 			if (err){
 				res.send(err);
-			}
+			};
 			if(user.password == req.body.password){
 				res.status(200).send("Match confirmed. Log on, buddy.");
 			}else{
 				res.status(401).send("Incorrect password");
-			}
+			};
 		});
 	}
 	catch(e){
 		res.status(500).send(e);
 	}
-})
+});
 
 
 // Notes -----------------------------------------------------------
@@ -218,4 +219,4 @@ app.delete("/task/:id", async (req, res) => {
 // -----------------------------------------------------------
 
 
-app.listen(port)
+app.listen(port);
