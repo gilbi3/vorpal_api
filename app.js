@@ -4,6 +4,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const jwt = require('jsonwebtoken')
+const jwtVerifier = require('express-jwt')
 const app = express()
 
 var port = process.env.PORT || 8080;
@@ -65,7 +67,13 @@ app.post("/user/login", async (req, res) => {
 				res.send(err);
 			};
 			if(user.password == req.body.password){
-				res.status(200).send("Match confirmed. Log on, buddy.");
+				res.json(jwt.sign(
+					{
+						username: user.username, 
+						email: user.email,
+						exp: Math.floor(Date.now() / 1000) + (60 * 60)
+					}, "tygertyger")
+				);
 			}else{
 				res.status(401).send("Incorrect password");
 			};
@@ -110,7 +118,7 @@ app.get("/notes/:id", async (req, res) => {
 	}
 });
 
-app.post("/notes", async (req, res) => {
+app.post("/notes", jwtVerifier({secret:secret}), async (req, res) => {
 	try {
 		var note = new Note(req.body);
 		var actionDate = new Date();
