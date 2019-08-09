@@ -46,19 +46,17 @@ db.once('open', function () {
 
 app.get("/user/:username", async (req, res) => {
 	try{
-		User.findById(req.params.username, function (err, user) {
-			if (err)
+		User.findOne({username: req.params.username}, function (err, user) {
+			if (err){
 				res.send(err);
+			}
 			res.json(user);
 		});
-
-		res.send(user)
 	}
 	catch(e){
 		res.status(500).send(e);
 	}
 });
-
 
 app.post("/user", async (req, res) => {
 	try{
@@ -72,6 +70,25 @@ app.post("/user", async (req, res) => {
 		res.status(500).send(e);
 	}
 });
+
+
+app.post("/user/login", async (req, res) => {
+	try{
+		User.findOne({username: req.body.username}, function (err, user) {
+			if (err){
+				res.send(err);
+			}
+			if(user.password == req.body.password){
+				res.status(200).send("Match confirmed. Log on, buddy.");
+			}else{
+				res.status(403).send("Incorrect password");
+			}
+		});
+	}
+	catch(e){
+		res.status(500).send(e);
+	}
+})
 
 
 // Notes -----------------------------------------------------------
