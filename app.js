@@ -5,7 +5,6 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
-const jwtVerifier = require('express-jwt')
 const app = express()
 
 var port = process.env.PORT || 8080;
@@ -13,18 +12,6 @@ var port = process.env.PORT || 8080;
 app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
-
-// app.all('*', function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
-//     res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
-
-//     if (req.method == 'OPTIONS') {
-//         res.send(200);
-//     } else {
-//         next();
-//     }
-// });
 
 var Note = require('./models/note');
 var Task = require('./models/task');
@@ -130,7 +117,7 @@ app.get("/notes/:id", async (req, res) => {
 	}
 });
 
-app.post("/notes", jwtVerifier({secret:secret}), async (req, res) => {
+app.post("/notes", async (req, res) => {
 	try {
 		var note = new Note(req.body);
 		var actionDate = new Date();
@@ -141,6 +128,7 @@ app.post("/notes", jwtVerifier({secret:secret}), async (req, res) => {
 	catch (e) {
 		res.status(500).send(e);
 	}
+
 });
 
 app.put("/notes/:id", async (req, res) => {
