@@ -4,6 +4,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cors = require('cors');
 const app = express()
 var port = process.env.PORT || 8080;
 
@@ -22,6 +23,7 @@ var allowCrossDomain = function(req, res, next) {
 };
 
 app.use(allowCrossDomain);
+app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
