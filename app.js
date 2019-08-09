@@ -14,6 +14,18 @@ app.use(cors());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
+app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
+    if (req.method == 'OPTIONS') {
+        res.send(200);
+    } else {
+        next();
+    }
+});
+
 var Note = require('./models/note');
 var Task = require('./models/task');
 var User = require('./models/user');
@@ -129,7 +141,6 @@ app.post("/notes", jwtVerifier({secret:secret}), async (req, res) => {
 	catch (e) {
 		res.status(500).send(e);
 	}
-
 });
 
 app.put("/notes/:id", async (req, res) => {
