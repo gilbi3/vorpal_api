@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 
 var NoteSchema = new Schema({
     text: String,
+    userId: String,
     created: Date,
     updated: Date,
     started: Boolean,

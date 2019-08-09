@@ -5,9 +5,12 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     username: String,
-    password: String,
+    firstName: String,
+    lastName: String,
     email: String,
-    joinDate: Date
+    password: String,
+    created: Date,
+    updated: Date
 });
 
 module.exports = mongoose.model('User', UserSchema);

@@ -41,7 +41,7 @@ db.once('open', function () {
 });
 
 
-// User -----------------------------------------------------------
+// Users -----------------------------------------------------------
 
 
 app.get("/user/:username", async (req, res) => {
@@ -63,7 +63,8 @@ app.get("/user/:username", async (req, res) => {
 app.post("/user", async (req, res) => {
 	try{
 		var newUser = new User(req.body);
-		newUser.joinDate = new Date();
+		newUser.created = new Date();
+		newUser.updated = newUser.created;
 		var result = newUser.save();
 		res.send(result);
 	}
@@ -145,16 +146,16 @@ app.delete("/notes/:id", async (req, res) => {
 // Tasks -----------------------------------------------------------
 
 
-app.get("/notes", async (req, res) => {
+app.get("/task", async (req, res) => {
 	try {
-		Note.find({}, function (err, notes) {
-			var noteArray = [];
+		Task.find({}, function (err, tasks) {
+			var taskArray = [];
 
-			notes.forEach(function (note) {
-				noteArray.push(note);
+			tasks.forEach(function (task) {
+				taskArray.push(task);
 			});
 
-			res.send(noteArray);
+			res.send(taskArray);
 		});
 	}
 	catch (e) {
@@ -162,12 +163,12 @@ app.get("/notes", async (req, res) => {
 	}
 });
 
-app.get("/notes/:id", async (req, res) => {
+app.get("/task/:id", async (req, res) => {
 	try {
-		Note.findById(req.params.id, function (err, note) {
+		Task.findById(req.params.id, function (err, task) {
 			if (err)
 				res.send(err);
-			res.json(note);
+			res.json(task);
 		});
 	}
 	catch (e) {
@@ -176,12 +177,12 @@ app.get("/notes/:id", async (req, res) => {
 
 });
 
-app.post("/notes", async (req, res) => {
+app.post("/task", async (req, res) => {
 	try {
-		var note = new Note(req.body);
+		var task = new Task(req.body);
 		var actionDate = new Date();
-		note.created = note.updated = actionDate;
-		var result = note.save();
+		task.created = task.updated = actionDate;
+		var result = task.save();
 		res.send(result);
 	}
 	catch (e) {
@@ -190,21 +191,21 @@ app.post("/notes", async (req, res) => {
 
 });
 
-app.put("/notes/:id", async (req, res) => {
+app.put("/task/:id", async (req, res) => {
 	try {
-		var note = await Note.findById(req.params.id).exec();
-		note.set(req.body);
-		note.updated = new Date();
-		var result = await note.save();
+		var task = await Task.findById(req.params.id).exec();
+		task.set(req.body);
+		task.updated = new Date();
+		var result = await task.save();
 		res.send(result);
 	} catch (e) {
 		res.status(500).send(e);
 	}
 });
 
-app.delete("/notes/:id", async (req, res) => {
+app.delete("/task/:id", async (req, res) => {
 	try {
-		var result = await Note.deleteOne({ _id: req.params.id }).exec();
+		var result = await Task.deleteOne({ _id: req.params.id }).exec();
 		res.send(result);
 	} catch (e) {
 		res.status(500).send(e);
